@@ -1,0 +1,49 @@
+﻿@model IEnumerable<TestSignalr.Models.Topic>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Top_Name)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Top_Name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Top_Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Top_Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Top_Id })
+            </td>
+        </tr>
+    }
+
+</table>
+@section scripts{
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.2.js"></script>
+    <script>
+        let conn = $.hubConnection();
+        prox = conn.createHubProxy("topic");
+        conn.start();
+
+        prox.on("newtopic", function (id, name) {
+            $("table").append("<tr><td>" + name + "</td> <td> <a href='/Edite/" + id + "'>Edite</a></td> </tr>")
+
+        })
+    </script>
+
+}
